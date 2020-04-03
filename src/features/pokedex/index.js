@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import PokemonDetails from './pokemonDetails';
-const Pokemon = () => {
-  const [pokemons, setPokemons] = useState(null);
+import Pokemon from './pokemon';
+const Pokedex = () => {
+  const [pokedex, setPokedex] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.get(
         'https://pokeapi.co/api/v2/pokemon?limit=151'
       );
-      setPokemons(data);
+      setPokedex(data);
     };
     fetchData();
   }, []);
@@ -34,10 +34,10 @@ const Pokemon = () => {
   };
   return (
     <div className="wrapper">
-      {pokemons &&
-        pokemons.results.map((pokemon, index) => {
+      {pokedex &&
+        pokedex.results.map((pokemon, index) => {
           return (
-            <PokemonDetails
+            <Pokemon
               key={index}
               pokemonUrl={pokemon}
               index={index}
@@ -49,4 +49,4 @@ const Pokemon = () => {
   );
 };
 
-export default Pokemon;
+export default Pokedex;

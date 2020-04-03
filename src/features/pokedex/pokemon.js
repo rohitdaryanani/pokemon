@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const PokemonDetails = ({ pokemonUrl, types }) => {
+const Pokemon = ({ pokemonUrl, types }) => {
   const [pokemon, setPokemon] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
@@ -13,16 +13,18 @@ const PokemonDetails = ({ pokemonUrl, types }) => {
   if (pokemon) {
     const pokemonType = pokemon.types.map(type => type.type.name);
 
-    const gradiant = `linear-gradient(90deg, ${types[pokemonType[0]]} 50%, ${
-      types[pokemonType[1]]
-    } 50%)`;
+    const backgroundType =
+      pokemonType.length === 1
+        ? types[pokemonType[0]]
+        : `linear-gradient(90deg, ${types[pokemonType[0]]} 50%, ${
+            types[pokemonType[1]]
+          } 50%)`;
 
     return (
       <div
         className="pokemon"
         style={{
-          background:
-            pokemonType.length === 1 ? types[pokemonType[0]] : gradiant
+          background: backgroundType
         }}
       >
         <img
@@ -47,4 +49,4 @@ const PokemonDetails = ({ pokemonUrl, types }) => {
   );
 };
 
-export default PokemonDetails;
+export default Pokemon;
