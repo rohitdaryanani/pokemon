@@ -17,8 +17,6 @@ const PokemonDetails = ({ pokemonUrl, types }) => {
       types[pokemonType[1]]
     } 50%)`;
 
-    console.log(pokemon.name, pokemonType.length !== 1 && gradiant);
-    // linear-gradient(90deg, #78C850 50%, #A040A0 50%)
     return (
       <div
         className="pokemon"
@@ -32,10 +30,21 @@ const PokemonDetails = ({ pokemonUrl, types }) => {
           loading="lazy"
           alt=""
         />
+        <div className="pokemon-name">
+          <span>{pokemon.name}</span>
+          <span>#{pokemon.id}</span>
+        </div>
       </div>
     );
   }
-  return <p>Loading...</p>;
+  return (
+    <div className="pokemon-loading">
+      <img
+        src="https://cdn.dribbble.com/users/621155/screenshots/2835314/simple_pokeball.gif"
+        alt=""
+      />
+    </div>
+  );
 };
 
 export default PokemonDetails;
