@@ -1,17 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import Pokemon from './pokemon';
 const Pokedex = () => {
-  const [pokedex, setPokedex] = useState(null);
+  const [pokemonList, setPokemonList] = useState([]);
+  const [nextUrl, setNextUrl] = useState(
+    'https://pokeapi.co/api/v2/pokemon?limit=20'
+  );
+  const [nu, setNu] = useState(undefined);
+  const [observer, setObserver] = useState(undefined);
+  const loadingRef = useRef(null);
+
+  const fetchData = async () => {
+    try {
+      const {
+        data: { results, next }
+      } = await axios.get(nextUrl);
+      setPokemonList([...pokemonList, ...results]);
+      setNextUrl(next);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const { data } = await axios.get(
-        'https://pokeapi.co/api/v2/pokemon?limit=151'
-      );
-      setPokedex(data);
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
     };
+
+    setTimeout(() => {
+      if (!observer) {
+        const obs = new IntersectionObserver(e => {
+          if (e[0].intersectionRatio === 1) setNu(Date.now());
+        }, options);
+        obs.observe(loadingRef.current);
+        setObserver(obs);
+      }
+    }, 1000);
+
     fetchData();
-  }, []);
+  }, [nu]);
+
   const types = {
     fire: '#F08030',
     water: '#6890F0',
@@ -32,10 +62,19 @@ const Pokedex = () => {
     fighting: '#C03028',
     bug: '#A8B820'
   };
+  if (pokemonList.length === 0) {
+    return (
+      <img
+        style={{ width: 30, height: 30 }}
+        src="https://i.imgur.com/XLJxE8S.gif"
+        alt="loading"
+      />
+    );
+  }
   return (
-    <div className="wrapper">
-      {pokedex &&
-        pokedex.results.map((pokemon, index) => {
+    <>
+      <div className="wrapper">
+        {pokemonList.map((pokemon, index) => {
           return (
             <Pokemon
               key={index}
@@ -45,7 +84,24 @@ const Pokedex = () => {
             />
           );
         })}
-    </div>
+      </div>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          background: '#e2e1e0'
+        }}
+        className="loading"
+        ref={loadingRef}
+      >
+        <img
+          style={{ width: 30, height: 30 }}
+          src="https://i.imgur.com/XLJxE8S.gif"
+          alt="loading"
+        />
+      </div>
+    </>
   );
 };
 
