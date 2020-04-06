@@ -20,7 +20,11 @@
   box-sizing: border-box;
 }
 
-img {
+.pokemon a {
+  text-decoration: none;
+}
+
+.pokemon img {
   width: 250px;
 }
 

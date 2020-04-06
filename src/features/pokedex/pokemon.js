@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Pokemon = ({ pokemonUrl, types }) => {
   const [pokemon, setPokemon] = useState(null);
@@ -27,15 +28,17 @@ const Pokemon = ({ pokemonUrl, types }) => {
           background: backgroundType
         }}
       >
-        <img
-          src={`https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png`}
-          loading="lazy"
-          alt=""
-        />
-        <div className="pokemon-name">
-          <span>{pokemon.name}</span>
-          <span>#{pokemon.id}</span>
-        </div>
+        <Link to={`/pokemon/${pokemon.id}`}>
+          <img
+            src={`https://pokeres.bastionbot.org/images/pokemon/${pokemon.id}.png`}
+            loading="lazy"
+            alt=""
+          />
+          <div className="pokemon-name">
+            <span>{pokemon.name}</span>
+            <span>#{pokemon.id}</span>
+          </div>
+        </Link>
       </div>
     );
   }
